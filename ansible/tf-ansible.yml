@@ -8,14 +8,6 @@
       args:
          creates: /sbin/nginx
 
-#    - name: task2 
-#      yum:
-#        list: curl
-#      vars:
-#        ansible_python_interpreter: /usr/bin/python3
-
-    - command: 'yum install pip3 python3 python-libselinux -y'
-
     - name: Start NGiNX
       service:
         name: nginx
@@ -25,3 +17,44 @@
       ansible.builtin.copy:
         src: /home/kgk/Desktop/DevOps_Course/Practical_test_for_DevOps_and_files/task3/terraform/ansible/index.html
         dest: /usr/share/nginx/html/index.html
+    
+    - name: Enable php74 and epel repositories
+      shell: amazon-linux-extras enable php7.4 epel
+
+    - name: Add MariaDB-10.3 repository
+      yum_repository:
+        name: MariaDB-10.3
+        description: mariadb
+        baseurl: http://yum.mariadb.org/10.3/centos7-amd64
+        gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+        gpgcheck: yes
+
+    - name: Install yum packages
+      yum:
+        name:
+         - epel-release
+         - acl
+         - git
+         - MariaDB-server
+         - MariaDB-client
+         - php-common
+         - php-fpm
+         - php-gd
+         - php-intl
+         - php-json
+         - php-mbstring
+         - php-mysqlnd
+         - php-xml
+        update_cache: yes
+
+    - name: Enable nginx service
+      service:
+        name: nginx
+        enabled: yes
+        state: started
+    
+    - name: Enable mariadb service
+      service:
+        name: mariadb
+        enabled: yes
+        state: started

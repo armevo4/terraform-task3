@@ -34,8 +34,8 @@ resource "aws_security_group" "myapp-sg" {
 		cidr_blocks = ["0.0.0.0/0"]
 	}
 	ingress {
-		from_port = 8080
-		to_port = 8080
+		from_port = 80
+		to_port = 80
 		protocol = "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
@@ -80,7 +80,8 @@ resource "aws_instance" "myapp-server" {
 						#!/bin/bash
 						sudo yum update -y
 						sudo amazon-linux-extras install ansible2 -y
-						sudo yum install libselinux-python
+						sudo yum install pip3 python3 -y
+						sudo yum install libselinux-python -y
 				   EOF
 
 	associate_public_ip_address = true
@@ -89,4 +90,8 @@ resource "aws_instance" "myapp-server" {
 	tags = {
 		Name = "tf-ec2"
 	}
+}
+
+output "aws_instance" {
+	value = aws_instance.myapp-server.public_ip
 }
