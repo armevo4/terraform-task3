@@ -1,0 +1,27 @@
+---
+- hosts: myServers
+  become: yes
+  
+  tasks:
+
+    - command: 'amazon-linux-extras install nginx1.12=latest -y'
+      args:
+         creates: /sbin/nginx
+
+#    - name: task2 
+#      yum:
+#        list: curl
+#      vars:
+#        ansible_python_interpreter: /usr/bin/python3
+
+    - command: 'yum install pip3 python3 python-libselinux -y'
+
+    - name: Start NGiNX
+      service:
+        name: nginx
+        state: started
+
+    - name: Upload default index.html for host
+      ansible.builtin.copy:
+        src: /home/kgk/Desktop/DevOps_Course/Practical_test_for_DevOps_and_files/task3/terraform/ansible/index.html
+        dest: /usr/share/nginx/html/index.html

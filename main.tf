@@ -76,6 +76,13 @@ resource "aws_instance" "myapp-server" {
 	vpc_security_group_ids = [aws_security_group.myapp-sg.id]
 	availability_zone = var.avail_zone
 	
+	user_data = <<-EOF
+						#!/bin/bash
+						sudo yum update -y
+						sudo amazon-linux-extras install ansible2 -y
+						sudo yum install libselinux-python
+				   EOF
+
 	associate_public_ip_address = true
 	key_name = "aws-freetair-key"
 	
